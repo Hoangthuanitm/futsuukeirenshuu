@@ -258,7 +258,6 @@
         <h1>模擬テスト</h1>
         <h2>普通形練習</h2>
     </div>
-
     <div class="student-info">
         <div>
             <label for="name">名前（なまえ）:</label>
@@ -270,16 +269,14 @@
         </div>
         <div>
             <label for="date">日付:</label>
-            <input type="date" id="date" name="date" value="2025-06-23">
+            <input type="date" id="date" name="date">
         </div>
     </div>
-
     <div class="button-container">
         <button id="start-test" type="button">Bắt đầu làm bài</button>
         <button id="history-test" type="button">Lịch sử kiểm tra</button>
     </div>
     <div id="message-info" class="error-message"></div>
-
     <div class="question-section" id="section-1" style="display: none;">
         <h2>問題１．普通形（動詞・い形容詞・な形容詞・名詞・特定文型）を確認してください。</h2>
         <h2>Hãy chuyển các câu sau sang dạng thông thường (động từ, tính từ đuôi い, tính từ đuôi な, danh từ, mẫu câu đặc biệt)</h2>
@@ -412,18 +409,15 @@
             <div class="answer-feedback" id="feedback-25"></div>
         </div>
     </div>
-
     <div class="button-container">
         <button id="submit-test" type="button" style="display: none;">テストを提出する</button>
         <button id="reset-test" type="button" class="reset" style="display: none;">Làm lại</button>
     </div>
     <div id="message-result" class="error-message"></div>
-
     <div class="result-section" id="results">
         <h2>採点結果 (Kết quả)</h2>
         <div id="score-display"></div>
     </div>
-
     <div class="password-modal" id="password-modal">
         <div class="password-box">
             <h2>パスワードを入力してください</h2>
@@ -451,7 +445,6 @@
             appLoaded = true;
             checkAllScriptsLoaded();
         }
-
         function firebaseFirestoreLoaded() {
             firestoreLoaded = true;
             console.log('Firebase Firestore Loaded');
@@ -474,6 +467,19 @@
             }).trim();
         }
 
+        // Set default date to today
+        function setDefaultDate() {
+            const dateInput = document.getElementById('date');
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            const todayStr = `${yyyy}-${mm}-${dd}`;
+            dateInput.value = todayStr;
+            // Optional: Prevent selecting past dates
+            dateInput.min = todayStr;
+        }
+
         // Initialize Firebase
         function initializeFirebase() {
             const messageDiv = document.getElementById('message-result');
@@ -483,7 +489,6 @@
                 return;
             }
 
-            // Firebase configuration
             const firebaseConfig = {
                 apiKey: "AIzaSyAfy4QMD9d9_7PyFHpInNdKDRWuW4AYCt",
                 authDomain: "history-e4633.firebaseapp.com",
@@ -495,7 +500,6 @@
             };
 
             try {
-                // Initialize Firebase
                 firebase.initializeApp(firebaseConfig);
                 console.log('Firebase initialized successfully');
             } catch (err) {
@@ -508,9 +512,7 @@
 
             // Save test result to Firestore
             async function saveTestResult(name, className, date, sectionScores, totalScore, percentage, ranking, startTime, endTime) {
-                console.log('Saving test result:', {
-                    name, className, date, sectionScores, totalScore, percentage, ranking, startTime, endTime
-                });
+                console.log('Saving test result:', { name, className, date, sectionScores, totalScore, percentage, ranking, startTime, endTime });
                 try {
                     await db.collection('testHistoryfutsuukeirenshuu').add({
                         name: name,
@@ -544,13 +546,8 @@
 
                 let totalScore = 0;
                 const totalQuestions = 25;
-                const sectionRanges = {
-                    section1: { start: 1, end: 25, total: 25 }
-                };
-
-                let sectionScores = {
-                    section1: 0
-                };
+                const sectionRanges = { section1: { start: 1, end: 25, total: 25 } };
+                let sectionScores = { section1: 0 };
 
                 for (let i = 1; i <= totalQuestions; i++) {
                     const userAnswer = document.getElementById(`q${i}`)?.value.trim();
@@ -608,56 +605,28 @@
                 document.getElementById("submit-test").style.display = "none";
                 document.getElementById("reset-test").style.display = "none";
                 document.getElementById('reset-test-result').style.display = 'inline-block';
-
                 document.getElementById('history-test-result').addEventListener('click', showPasswordModal);
                 document.getElementById('reset-test-result').addEventListener('click', resetTest);
-
                 saveTestResult(name, className, dateInput, sectionScores, totalScore, percentage, ranking, startTime, endTime);
             }
 
-            // Answer key for all questions (in hiragana)
+            // Answer key
             const answerKey = {
-                1: "いく",
-                2: "わからない",
-                3: "ない",
-                4: "きた",
-                5: "はたらかなかった",
-                6: "いない",
-                7: "おもしろい",
-                8: "でかけたくない",
-                9: "むずかしくなかった",
-                10: "よかった",
-                11: "しんせつだ",
-                12: "あめだった",
-                13: "にぎやかじゃなかった",
-                14: "じょうずじゃない",
-                15: "はなす",
-                16: "かよわない",
-                17: "おもしろかった",
-                18: "げんきだ",
-                19: "さむかった",
-                20: "べんきょうする",
-                21: "しなければならない",
-                22: "かくことができる",
-                23: "いったことがある",
-                24: "はなしている",
-                25: "たべてはいけない"
+                1: "いく", 2: "わからない", 3: "ない", 4: "きた", 5: "はたらかなかった",
+                6: "いない", 7: "おもしろい", 8: "でかけたくない", 9: "むずかしくなかった", 10: "よかった",
+                11: "しんせつだ", 12: "あめだった", 13: "にぎやかじゃなかった", 14: "じょうずじゃない", 15: "はなす",
+                16: "かよわない", 17: "おもしろかった", 18: "げんきだ", 19: "さむかった", 20: "べんきょうする",
+                21: "しなければならない", 22: "かくことができる", 23: "いったことがある", 24: "はなしている", 25: "たべてはいけない"
             };
 
             // Show password modal
             function showPasswordModal() {
-                try {
-                    const modal = document.getElementById('password-modal');
-                    if (!modal) throw new Error('Password modal not found');
-                    modal.style.display = 'flex';
-                    document.getElementById('password-input').focus();
-                } catch (error) {
-                    console.error('Error in showPasswordModal:', error);
-                    document.getElementById('message-result').textContent = 'モーダルを表示できませんでした。';
-                }
+                const modal = document.getElementById('password-modal');
+                modal.style.display = 'flex';
+                document.getElementById('password-input').focus();
             }
 
-            // Check password and redirect
+            // Check password
             function checkPassword() {
                 const passwordInput = document.getElementById('password-input').value.trim();
                 const passwordError = document.getElementById('password-error');
@@ -669,21 +638,19 @@
                 }
             }
 
-            // Close password modal
+            // Close modal
             function closePasswordModal() {
                 const modal = document.getElementById('password-modal');
-                if (modal) {
-                    modal.style.display = 'none';
-                    document.getElementById('password-input').value = '';
-                    document.getElementById('password-error').textContent = '';
-                }
+                modal.style.display = 'none';
+                document.getElementById('password-input').value = '';
+                document.getElementById('password-error').textContent = '';
             }
 
             // Reset test
             function resetTest() {
                 document.getElementById('name').value = '';
                 document.getElementById('class').value = '';
-                document.getElementById('date').value = '2025-06-23';
+                setDefaultDate(); // Reset về hôm nay
                 document.getElementById('message-info').textContent = '';
                 document.getElementById('message-result').textContent = '';
                 document.getElementById('results').style.display = 'none';
@@ -709,14 +676,11 @@
                 const className = document.getElementById('class').value.trim();
                 const dateInput = document.getElementById('date').value;
                 const messageInfo = document.getElementById('message-info');
-
                 if (!name || !className || !dateInput) {
                     messageInfo.textContent = 'すべての情報を入力してください';
                     return;
                 }
-
                 startTime = formatDateTime(new Date());
-                console.log("Start Time: ", startTime);
                 messageInfo.textContent = '';
                 document.getElementById('start-test').style.display = 'none';
                 document.getElementById('history-test').style.display = 'none';
@@ -726,8 +690,10 @@
                 document.getElementById('reset-test').style.display = 'none';
             }
 
-            // Attach event listeners
+            // DOM Loaded
             document.addEventListener('DOMContentLoaded', () => {
+                setDefaultDate(); // Đặt ngày mặc định là hôm nay
+
                 document.getElementById('start-test').addEventListener('click', startTest);
                 document.getElementById('history-test').addEventListener('click', showPasswordModal);
                 document.getElementById('submit-test').addEventListener('click', checkAnswers);
